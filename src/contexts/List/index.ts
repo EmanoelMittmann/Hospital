@@ -1,2 +1,3 @@
-import { Patients } from "./Patient";
-export const List = Object.assign({}, { Patients });
+import { Records } from "./Records";
+import { Patient } from "./Patient";
+export const List = Object.assign({}, { Records, Patient });

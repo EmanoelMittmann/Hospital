@@ -1,40 +1,67 @@
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useEffect,
   useState,
 } from "react";
-import { ContextProps, RecordsProps } from "./types";
+import { ContextProps, PatientProps } from "./types";
 import api from "api";
-import { mock } from "./mock";
 
 export const Context = createContext({} as ContextProps);
 
 export const Provider = ({ children }: { children: ReactNode }) => {
-  const [records, setRecords] = useState<RecordsProps[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [patient, setPatient] = useState<PatientProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const contextProps = {
-    records,
-    isLoading,
-  };
-
-  const fetchRecords = useCallback(async () => {
-    setLoading(true);
+  const fetch = useCallback(async () => {
     try {
-      // const { data } = await api.get("/Records");
-      setRecords(mock);
-      setLoading(false);
+      const { data } = await api.get("/Records");
+      setPatient(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleCreate = async (data: PatientProps) => {
+    try {
+      await api.post("/Records", data);
     } catch (error) {
       console.error(error);
     }
-    setLoading(false);
-  }, []);
+  };
+
+  const handleEdit = async (data: PatientProps) => {
+    try {
+      await api.put("/Records", data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`/Record?id=${id}`);
+      fetch();
+      setIsLoading(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const contextProps = {
+    patient,
+    isLoading,
+    handleCreate,
+    handleEdit,
+    handleDelete,
+  };
 
   useEffect(() => {
-    fetchRecords();
-  }, [fetchRecords]);
+    fetch();
+  }, [fetch]);
 
   return (
     <Context.Provider value={contextProps}>

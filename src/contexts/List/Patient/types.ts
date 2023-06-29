@@ -1,12 +1,15 @@
 export interface ContextProps {
-  records: RecordsProps[];
+  patient: PatientProps[];
   isLoading: boolean;
+  handleCreate(data: PatientProps): void;
+  handleEdit(data: PatientProps): void;
+  handleDelete(id: number): void;
 }
 
-export interface RecordsProps {
+export interface PatientProps {
   id: number;
   avatar?: string;
-  name: string;
+  namePatient: string;
   cpf: string;
   phone: string;
   address: string;

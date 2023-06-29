@@ -1,2 +1,2 @@
 import { Context, Provider } from "./context";
-export const Patients = Object.assign({}, { Context, Provider });
+export const Patient = Object.assign({}, { Context, Provider });
