@@ -28,6 +28,8 @@ export const Provider = ({ children }: { children: ReactNode }) => {
   const handleCreate = async (data: PatientProps) => {
     try {
       await api.post("/Records", data);
+      fetch();
+      setIsLoading(true);
     } catch (error) {
       console.error(error);
     }

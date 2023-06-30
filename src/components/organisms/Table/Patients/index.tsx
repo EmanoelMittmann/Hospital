@@ -1,15 +1,27 @@
-import { useMemo, useContext } from "react";
+import { useMemo, useContext, useRef } from "react";
 import { Header } from "./contants";
 import { List } from "contexts";
 import { Shelf } from "./shelf";
+import { Ihandle, Modal } from "components/molecules/Modal";
+import { PatientProps } from "contexts/List/Patient/types";
 
 export const Patients = () => {
   const { patient, isLoading } = useContext(List.Patient.Context);
+  const ref = useRef<Ihandle>(null);
+
+  const Options = (data: PatientProps) => [
+    {
+      label: "Editar",
+      callback: () => ref.current?.Open(data),
+    },
+  ];
 
   const Table = useMemo(() => {
     if (isLoading) <>Loading...</>;
 
-    return patient.map((props) => <Shelf props={props} />);
+    return patient.map((props) => (
+      <Shelf props={props} config={{ options: Options(props) }} />
+    ));
   }, [isLoading]);
 
   return (
@@ -21,6 +33,7 @@ export const Patients = () => {
           </div>
         ))}
       </div>
+      <Modal.Edit ref={ref} />
       {Table}
     </div>
   );

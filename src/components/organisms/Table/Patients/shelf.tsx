@@ -5,7 +5,7 @@ import { IconEdit } from "components/atoms";
 import { IconTrash } from "components/atoms/Icon/IconTrash";
 import { List } from "contexts";
 
-export const Shelf = ({ props }: ShelfProps<PatientProps>) => {
+export const Shelf = ({ props, config }: ShelfProps<PatientProps>) => {
   const { address, cpf, namePatient, phone } = props;
 
   const { handleDelete, handleEdit } = useContext(List.Patient.Context);
@@ -17,7 +17,10 @@ export const Shelf = ({ props }: ShelfProps<PatientProps>) => {
       <div className="flex items-center overflow-hidden">{phone}</div>
       <div className="flex items-center overflow-hidden">{address}</div>
       <div className="flex items-center overflow-hidden gap-4">
-        <IconEdit className="cursor-pointer" onClick={() => {}} />
+        <IconEdit
+          className="cursor-pointer"
+          onClick={() => config?.options[0].callback()}
+        />
         <IconTrash
           className="cursor-pointer"
           onClick={() => handleDelete(props.id)}
